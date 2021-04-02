@@ -32,6 +32,12 @@ public class Gun : MonoBehaviour
             Debug.Log(hit.transform.name);
             GameObject impact = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impact, 2f);
+
+            Target target = hit.transform.GetComponent<Target>();
+            if(target != null)
+            {
+                target.TakeDamage(damage);
+            }
         }
         bullets.Play();
 
