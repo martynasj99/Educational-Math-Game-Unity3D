@@ -27,64 +27,130 @@ public class QuizManager : MonoBehaviour
         {
 
         }
-        public void correctAnswer()
+        public void CorrectAnswer()
         {
             correct++;
         }
 
-        public void incorrectAnswer()
+        public void IncorrectAnswer()
         {
             incorrect++;
         }
     }
 
-    public static int level = 0;
-    public static int questions = 10;
-    public static int currentQuestionNum = 0;
+    public static int level;
+    public static int questions;
+    public static int currentQuestionNum;
 
     public static List<Result> results = new List<Result>();
 
-    public static Result currentResult;
     public static string symbol;
+    public static Result currentResult;
     public static QuizType.Type type;
 
     public static Question currentQuestion;
 
-    public GameObject eol;
+    public static int answer;
 
+    public GameObject eol;
+    private bool isAnswered = false;
+
+    public GameObject speechManager;
+
+    private SpeechManager speech;
+    private int maxNum;
     void Start()
     {
-        type = (QuizType.Type) level;
-        currentResult = new Result();
-        NextQuestion();
+        speech = speechManager.GetComponent<SpeechManager>();
+        answer = 0;
+        level = 0;
+        currentQuestionNum = 0;
+
+        switch (Difficulty.difficulty)
+        {
+            case Difficulty.GameDifficulty.EASY:
+                questions = 5;
+                maxNum = 10;
+                break;
+            case Difficulty.GameDifficulty.MEDIUM:
+                questions = 10;
+                maxNum = 20;
+                break;
+            case Difficulty.GameDifficulty.HARD:
+                questions = 20;
+                maxNum = 50;
+                break;
+            default:
+                Debug.LogError("No Difficulty Found!");
+                break;
+        }
+
+        NewLevel(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Jump") && isAnswered)
+        {
+            SubmitAnswer(answer);
+        }
+        if (Input.GetKey(KeyCode.H))
+        {
+            speech.Help(level);
+        }
     }
 
     void NextQuestion()
     {
+        isAnswered = false;
+        if(level == 4)
+        {
+            type = (QuizType.Type) Random.Range(0, 4);
+        }
         currentQuestion = GenerateQuestion(type);
         currentQuestionNum++;
     }
 
-    public void ProvideAnswer(int answer)
+    public void SubmitAnswer(int ans)
     {
-        if (answer == currentQuestion.answer) currentResult.correctAnswer();
-        else currentResult.incorrectAnswer();
+        if (ans == currentQuestion.answer)
+        {
+            currentResult.CorrectAnswer();
+            speech.Encourage();
+        }
+        else 
+        {
+            currentResult.IncorrectAnswer();
+            speech.Motivate();
+        }
         
         if (currentQuestionNum == questions)
         {
             NewLevel(true);
-
         }
         else
         {
             NextQuestion();
         }
+        answer = 0;
+    }
+
+    public void ProvideNumber(int num)
+    {
+        if (!isAnswered) answer = num;
+        else
+        {
+            answer = Mathf.Abs(answer * 10) + Mathf.Abs(num);
+            answer = num < 0 ? answer * -1 : answer;
+
+        }
+        isAnswered = true;
     }
 
     private  Question GenerateQuestion(QuizType.Type type)
     {
-        int num1 = Random.Range(1, 10);
-        int num2 = Random.Range(1, 10);
+        int num1 = Random.Range(1, maxNum);
+        int num2 = Random.Range(1, maxNum);
         int answer = 0;
 
         switch (type)
@@ -103,12 +169,12 @@ public class QuizManager : MonoBehaviour
                 break;
             case QuizType.Type.DIVISION:
                 symbol = "/";
-                answer = num1 / num2;
+                answer = num1*num2 / num2;
                 break;
             default:
                 break;
         }
-        return new Question(num1, num2, answer);
+        return new Question(type == QuizType.Type.DIVISION ? num1*num2 : num1, num2, answer);
     }
 
     public void NewLevel(bool isEnd)
@@ -122,9 +188,10 @@ public class QuizManager : MonoBehaviour
             currentResult = new Result();
             currentQuestionNum = 0;
             level++;
-            type = (QuizType.Type)level;
+            type = (QuizType.Type) (level-1);
             results.Add(currentResult);
             NextQuestion();
+            speech.NewLevel(level);
         }
         else if(isEnd)
         {

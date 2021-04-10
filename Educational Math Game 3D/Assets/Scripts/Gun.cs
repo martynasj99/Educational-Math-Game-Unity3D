@@ -6,15 +6,11 @@ public class Gun : MonoBehaviour
 {
     public float damage = 10f;
     public float range = 100f;
+    public int modifier;
 
     public Camera camera;
     public ParticleSystem bullets;
     public GameObject hitEffect;
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -29,13 +25,13 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
             GameObject impact = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impact, 2f);
 
             Target target = hit.transform.GetComponent<Target>();
             if(target != null)
             {
+                target.ApplyModifier(modifier);
                 target.TakeDamage(damage);
             }
         }

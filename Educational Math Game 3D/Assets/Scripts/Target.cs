@@ -7,20 +7,15 @@ public class Target : MonoBehaviour
     public int value;
     public float health = 500f;
 
-    void Start()
-    {
-        
-    }
     void Update()
     {
         if (health <= 0)
         {
-            GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideAnswer(value);
+            GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideNumber(value);
             gameObject.SetActive(false);
             Destroy(gameObject, 3.0f);
             health = 1000f;
             Invoke("Respawn", 2.0f);
-            
         }
     }
 
@@ -35,4 +30,8 @@ public class Target : MonoBehaviour
         health -= amount;
     }
 
+    public void ApplyModifier(int modifier)
+    {
+        value = Mathf.Abs(value) * modifier;
+    }
 }

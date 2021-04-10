@@ -19,9 +19,16 @@ public class MouseLook : MonoBehaviour{
 
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime;
+        
+        
+        float mouseX = Input.GetAxis("Mouse X") != 0 ?
+            Input.GetAxis("Mouse X")  : Input.GetAxis("Joy X");
+        mouseX *= mouseSpeed * Time.deltaTime;
 
+        float mouseY = Input.GetAxis("Mouse Y") != 0 ?
+            Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime : 
+            Input.GetAxis("Joy Y") * mouseSpeed * Time.deltaTime * -1;
+   
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 

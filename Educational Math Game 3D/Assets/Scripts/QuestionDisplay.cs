@@ -7,7 +7,7 @@ public class QuestionDisplay : MonoBehaviour
 {
     void Update()
     {
-        GetComponent<Text>().text = QuizManager.currentQuestion.num1 + " " + QuizManager.symbol + " " + QuizManager.currentQuestion.num2 + " = \n" +
+        GetComponent<Text>().text = QuizManager.currentQuestion.num1 + " " + QuizManager.symbol + " " + QuizManager.currentQuestion.num2 + " = " + QuizManager.answer + "\n" +
             "Level: " + QuizManager.level + " Question " + QuizManager.currentQuestionNum + "/" + QuizManager.questions; 
     }
 }

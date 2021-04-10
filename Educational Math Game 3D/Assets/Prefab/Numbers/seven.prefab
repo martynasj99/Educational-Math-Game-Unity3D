@@ -424,7 +424,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6fab3e8072553640b4ce86d3e76386d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quizManager: {fileID: 5733282672760559002, guid: 08eab01f59c61874e85a7c9fe45652fe, type: 3}
-  value: 0
+  value: 7
   health: 100
-  isDead: 0
