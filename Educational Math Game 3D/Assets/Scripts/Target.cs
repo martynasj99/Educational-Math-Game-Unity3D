@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    public GameObject explode;
+
     public int value;
     public float health = 500f;
 
@@ -11,12 +13,19 @@ public class Target : MonoBehaviour
     {
         if (health <= 0)
         {
-            GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideNumber(value);
-            gameObject.SetActive(false);
-            Destroy(gameObject, 3.0f);
-            health = 1000f;
-            Invoke("Respawn", 2.0f);
+            Die();
         }
+    }
+
+    public void Die()
+    {
+        GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideNumber(value);
+        gameObject.SetActive(false);
+        GameObject explodeParticle = Instantiate(explode, transform.position, Quaternion.identity);
+        GameObject.Destroy(explodeParticle, 1.0f);
+        Destroy(gameObject, 3.0f);
+        health = 1000f;
+        Invoke("Respawn", 2.0f);
     }
 
     public void Respawn()
@@ -27,6 +36,8 @@ public class Target : MonoBehaviour
     
     public void TakeDamage(float amount)
     {
+        //gameObject.GetComponent<Rigidbody>().AddForce(direction);
+        //Invoke("Die", 1.0f);
         health -= amount;
     }
 

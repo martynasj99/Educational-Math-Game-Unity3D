@@ -38,6 +38,8 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    private const int FINAL_LEVEL = 6;
+
     public static int level;
     public static int questions;
     public static int currentQuestionNum;
@@ -53,6 +55,7 @@ public class QuizManager : MonoBehaviour
     public static int answer;
 
     public GameObject eol;
+    public GameObject eog;
     private bool isAnswered = false;
 
     public GameObject speechManager;
@@ -85,7 +88,7 @@ public class QuizManager : MonoBehaviour
                 break;
         }
 
-        NewLevel(false);
+        StartLevel();
     }
 
     private void Update()
@@ -103,7 +106,7 @@ public class QuizManager : MonoBehaviour
     void NextQuestion()
     {
         isAnswered = false;
-        if(level == 4)
+        if(level == 5)
         {
             type = (QuizType.Type) Random.Range(0, 4);
         }
@@ -126,7 +129,7 @@ public class QuizManager : MonoBehaviour
         
         if (currentQuestionNum == questions)
         {
-            NewLevel(true);
+            EndLevel();
         }
         else
         {
@@ -177,27 +180,52 @@ public class QuizManager : MonoBehaviour
         return new Question(type == QuizType.Type.DIVISION ? num1*num2 : num1, num2, answer);
     }
 
-    public void NewLevel(bool isEnd)
+    public void EndLevel()
     {
-        eol.SetActive(isEnd);
-        Cursor.lockState = isEnd ? CursorLockMode.None : CursorLockMode.Locked;
-        Time.timeScale = isEnd ? 0 : 1;
+        eol.SetActive(true);
+        results.Add(currentResult);
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0;
+        eol.transform.GetChild(0).GetComponent<Text>().text = "Well Done! You completed level " + level;
+        eol.transform.GetChild(1).GetComponent<Text>().text = "Correct " + currentResult.correct;
+        eol.transform.GetChild(2).GetComponent<Text>().text = "Incorrect " + currentResult.incorrect;
 
-        if (!isEnd)
+    }
+
+    public void StartLevel()
+    {
+        eol.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1;
+        level++;
+        currentResult = new Result();
+        currentQuestionNum = 0;
+        type = (QuizType.Type)(level - 1);
+        
+        NextQuestion();
+        speech.NewLevel(level);
+        if (level == FINAL_LEVEL)
         {
-            currentResult = new Result();
-            currentQuestionNum = 0;
-            level++;
-            type = (QuizType.Type) (level-1);
-            results.Add(currentResult);
-            NextQuestion();
-            speech.NewLevel(level);
+            EndGame();
         }
-        else if(isEnd)
+    }
+
+    public void EndGame()
+    {
+        eog.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0;
+       
+        for (int i = 0; i < FINAL_LEVEL-1; i++)
         {
-            eol.transform.GetChild(0).GetComponent<Text>().text = "Well Done! You completed level " + level;
-            eol.transform.GetChild(1).GetComponent<Text>().text = "Correct " + currentResult.correct;
-            eol.transform.GetChild(2).GetComponent<Text>().text = "Incorrect " + currentResult.incorrect;
+            if(i == FINAL_LEVEL - 2)
+            {
+                eog.transform.GetChild(i + 1).GetComponent<Text>().text = "Quiz: " + results[i].correct + " out of " + questions;
+            }
+            else
+            {
+                eog.transform.GetChild(i + 1).GetComponent<Text>().text = "Level " + (i + 1) + ": " + results[i].correct + " out of " + questions;
+            }
         }
 
     }
