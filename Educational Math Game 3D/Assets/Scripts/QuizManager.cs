@@ -59,6 +59,7 @@ public class QuizManager : MonoBehaviour
     private bool isAnswered = false;
 
     public GameObject speechManager;
+    public GameObject AICoLearner;
 
     private SpeechManager speech;
     private int maxNum;
@@ -101,6 +102,7 @@ public class QuizManager : MonoBehaviour
         {
             speech.Help(level);
         }
+
     }
 
     void NextQuestion()
@@ -112,6 +114,12 @@ public class QuizManager : MonoBehaviour
         }
         currentQuestion = GenerateQuestion(type);
         currentQuestionNum++;
+        if(currentQuestionNum == questions/2)
+        {
+           
+            StartCoroutine(AICoLearner.GetComponent<AICoLearner>().ExecuteAction(Mathf.Abs(FirstDigit(currentQuestion.answer))));
+            speech.Action();
+        }
     }
 
     public void SubmitAnswer(int ans)
@@ -228,6 +236,14 @@ public class QuizManager : MonoBehaviour
             }
         }
 
+    }
+
+    private int FirstDigit(int n)
+    {
+        while (n >= 10)
+            n /= 10;
+
+        return n;
     }
 
 }

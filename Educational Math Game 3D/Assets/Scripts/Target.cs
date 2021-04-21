@@ -7,7 +7,7 @@ public class Target : MonoBehaviour
     public GameObject explode;
 
     public int value;
-    public float health = 500f;
+    public float health;
 
     void Update()
     {
@@ -24,7 +24,7 @@ public class Target : MonoBehaviour
         GameObject explodeParticle = Instantiate(explode, transform.position, Quaternion.identity);
         GameObject.Destroy(explodeParticle, 1.0f);
         Destroy(gameObject, 3.0f);
-        health = 1000f;
+        health = 100f;
         Invoke("Respawn", 2.0f);
     }
 

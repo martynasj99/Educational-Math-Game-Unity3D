@@ -45,6 +45,11 @@ public class SpeechManager : MonoBehaviour
         }
     }
 
+    public void Action()
+    {
+        string[] speech = { "I will help you be giving you the first digit!" };
+        ChangeSpeech(speech[Random.Range(0, speech.Length)]);
+    }
     public void Help(int level)
     {
         switch (level)
