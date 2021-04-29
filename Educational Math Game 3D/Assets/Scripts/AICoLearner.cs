@@ -33,11 +33,11 @@ public class AICoLearner : MonoBehaviour
         }
         LookAt(target);
     }
-    private void OnCollisionStay(Collision collision)
+/*    private void OnCollisionStay(Collision collision)
     {
-        Vector3 direction = collision.transform.position - transform.position;
-        transform.position = new Vector3(transform.position.x - (direction.x > 0 ? 0.1f : -0.1f), transform.position.y, transform.position.z - (direction.z > 0 ? 0.1f : -0.1f));   
-    }
+            Vector3 direction = collision.transform.position - transform.position;
+            transform.position = new Vector3(transform.position.x - (direction.x > 0 ? 0.1f : -0.1f), transform.position.y, transform.position.z - (direction.z > 0 ? 0.1f : -0.1f));
+    }*/
 
     private void LookAt(Transform target)
     {
@@ -49,13 +49,11 @@ public class AICoLearner : MonoBehaviour
 
     public IEnumerator ExecuteAction(int number)
     {
-        Debug.Log("Executing: "+number);
         yield return new WaitForSeconds(1);
         target = targets[number];
         yield return new WaitForSeconds(2);
-        gunHolder.transform.GetChild(gunHolder.GetComponent<WeaponSwitch>().selected).GetComponent<Gun>().Shoot();
+        gunHolder.GetComponent<Projectile>().Throw();
         yield return new WaitForSeconds(1);
         target = player.transform;
     }
-    
 }

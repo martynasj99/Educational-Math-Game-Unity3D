@@ -25,18 +25,14 @@ public class Gun : MonoBehaviour
     public void Shoot()
     {
         RaycastHit hit;
-        Debug.DrawRay(source.transform.position, source.transform.forward * range, Color.green);
         if (Physics.Raycast(source.transform.position, source.transform.forward, out hit, range))
         {
-            
-            Debug.Log("HIT!");
             GameObject impact = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impact, 2f);
 
             Target target = hit.transform.GetComponent<Target>();
             if(target != null)
             {
-                Debug.Log("Target: " + target.name);
                 target.ApplyModifier(modifier);
                 target.TakeDamage(damage);
             }

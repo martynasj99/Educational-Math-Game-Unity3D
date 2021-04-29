@@ -8,6 +8,7 @@ using UnityEngine;
 public class WeaponSwitch : MonoBehaviour
 {
 
+    public GameObject[] balls;
     public int selected = 0;
 
     public bool isPlayer;

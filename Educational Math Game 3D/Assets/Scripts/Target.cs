@@ -5,9 +5,19 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     public GameObject explode;
+    //public GameObject destroyedObject;
 
     public int value;
     public float health;
+
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
+    private void Start()
+    {
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+    }
 
     void Update()
     {
@@ -20,10 +30,13 @@ public class Target : MonoBehaviour
     public void Die()
     {
         GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideNumber(value);
-        gameObject.SetActive(false);
+        //Instantiate(destroyedObject, destroyedObject.transform.position, destroyedObject.transform.rotation);
+        //gameObject.SetActive(false);
         GameObject explodeParticle = Instantiate(explode, transform.position, Quaternion.identity);
+        
         GameObject.Destroy(explodeParticle, 1.0f);
         Destroy(gameObject, 3.0f);
+
         health = 100f;
         Invoke("Respawn", 2.0f);
     }
@@ -31,18 +44,17 @@ public class Target : MonoBehaviour
     public void Respawn()
     {
         gameObject.SetActive(true);
-        Instantiate(gameObject, transform.position, transform.rotation);
+        Instantiate(gameObject, startPosition, startRotation);
     }
     
     public void TakeDamage(float amount)
     {
-        //gameObject.GetComponent<Rigidbody>().AddForce(direction);
-        //Invoke("Die", 1.0f);
         health -= amount;
     }
 
     public void ApplyModifier(int modifier)
     {
         value = Mathf.Abs(value) * modifier;
+        Die();
     }
 }

@@ -96,7 +96,7 @@ public class QuizManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && isAnswered)
         {
-            SubmitAnswer(answer);
+            SubmitAnswer();
         }
         if (Input.GetKey(KeyCode.H))
         {
@@ -122,9 +122,9 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    public void SubmitAnswer(int ans)
+    public void SubmitAnswer()
     {
-        if (ans == currentQuestion.answer)
+        if (answer == currentQuestion.answer)
         {
             currentResult.CorrectAnswer();
             speech.Encourage();
@@ -216,6 +216,7 @@ public class QuizManager : MonoBehaviour
         {
             EndGame();
         }
+        GameObject.Find("GameManager").GetComponent<WindSystem>().GenerateWind();
     }
 
     public void EndGame()

@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance;
     public LayerMask groundMask;
 
+    public Joystick joystick;
+
     Vector3 velocity;
 
     bool isGrounded;
@@ -29,8 +31,20 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x, z;
+
+        if (Input.mousePresent)
+        {
+            joystick.gameObject.SetActive(false);
+            x = Input.GetAxis("Horizontal");
+            z = Input.GetAxis("Vertical");
+        }
+        else
+        {
+            joystick.gameObject.SetActive(true);
+            x = joystick.Horizontal;
+            z = joystick.Vertical;
+        }
 
         Vector3 move = transform.right * x + transform.forward * z;
 

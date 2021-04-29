@@ -7,28 +7,33 @@ using UnityEngine;
  */
 public class MouseLook : MonoBehaviour{
 
-    public float mouseSpeed = 1000f;
+    public float mouseSpeed = 200f;
     public Transform playerBody;
 
     private float xRotation = 0f;
 
+    public Joystick joystick;
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = Input.mousePresent ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     void Update()
     {
-        
-        
-        float mouseX = Input.GetAxis("Mouse X") != 0 ?
-            Input.GetAxis("Mouse X")  : Input.GetAxis("Joy X");
-        mouseX *= mouseSpeed * Time.deltaTime;
+        float mouseX, mouseY;
+        if (Input.mousePresent)
+        {
+            joystick.gameObject.SetActive(false);
+            mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
+            mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime;
+        }
+        else
+        {
+            joystick.gameObject.SetActive(true);
+            mouseX = joystick.Horizontal * 100 * Time.deltaTime;
+            mouseY = joystick.Vertical * 100 * Time.deltaTime;
+        }
 
-        float mouseY = Input.GetAxis("Mouse Y") != 0 ?
-            Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime : 
-            Input.GetAxis("Joy Y") * mouseSpeed * Time.deltaTime * -1;
-   
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
