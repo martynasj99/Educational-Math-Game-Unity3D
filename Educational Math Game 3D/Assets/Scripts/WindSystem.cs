@@ -30,7 +30,7 @@ public class WindSystem : MonoBehaviour
 
     public void GenerateWind()
     {
-        windSpeed = Random.Range(0.0f, 150.0f);
+        windSpeed = Random.Range(0.0f, 100.0f);
         direction = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
         arrow.transform.Rotate(0, 0, Mathf.Atan2(direction.z, direction.x )*180/Mathf.PI+90, Space.World);
     }

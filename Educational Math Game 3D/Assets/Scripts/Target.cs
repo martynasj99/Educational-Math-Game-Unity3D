@@ -19,31 +19,25 @@ public class Target : MonoBehaviour
         startRotation = transform.rotation;
     }
 
-    void Update()
+    public void Hit()
     {
-        if (health <= 0)
-        {
-            Die();
-        }
+        GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideNumber(value);
+        GameObject explodeParticle = Instantiate(explode, transform.position, Quaternion.identity);
+        Destroy(explodeParticle, 1.0f);
+        Die();
     }
 
     public void Die()
     {
-        GameObject.Find("QuizManager").GetComponent<QuizManager>().ProvideNumber(value);
-        //Instantiate(destroyedObject, destroyedObject.transform.position, destroyedObject.transform.rotation);
-        //gameObject.SetActive(false);
-        GameObject explodeParticle = Instantiate(explode, transform.position, Quaternion.identity);
-        
-        GameObject.Destroy(explodeParticle, 1.0f);
+        Invoke("Respawn", 3.0f);
         Destroy(gameObject, 3.0f);
-
-        health = 100f;
-        Invoke("Respawn", 2.0f);
+        
     }
+
+    
 
     public void Respawn()
     {
-        gameObject.SetActive(true);
         Instantiate(gameObject, startPosition, startRotation);
     }
     
@@ -55,6 +49,6 @@ public class Target : MonoBehaviour
     public void ApplyModifier(int modifier)
     {
         value = Mathf.Abs(value) * modifier;
-        Die();
+        Hit();
     }
 }

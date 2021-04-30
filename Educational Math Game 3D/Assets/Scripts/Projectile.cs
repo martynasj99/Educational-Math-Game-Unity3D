@@ -15,6 +15,7 @@ public class Projectile : MonoBehaviour
     private Vector3 fp;   //First touch position
     private Vector3 lp;   //Last touch position
     private float dragDistance = Screen.height * 0.2f;  //minimum distance for a swipe to be registered
+    
 
     void Start()
     {
@@ -66,11 +67,11 @@ public class Projectile : MonoBehaviour
                         {   //If the horizontal movement is greater than the vertical movement...
                             if ((lp.x > fp.x))  //If the movement was to the right)
                             {   //Right swipe
-                                Debug.Log("Right Swipe");
+                                gameObject.GetComponent<WeaponSwitch>().SwitchWeaponForward();
                             }
                             else
                             {   //Left swipe
-                                Debug.Log("Left Swipe");
+                                gameObject.GetComponent<WeaponSwitch>().SwitchWeaponBack();
                             }
                         }
                         else
