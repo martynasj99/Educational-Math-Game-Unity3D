@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
             }
             if (Input.GetButton("Fire1") )
             {
-                velocity += 3;
+                velocity += 500 * Time.deltaTime; 
                 if(velocity > MAX_VELOCITY)
                 {
                     velocity = MAX_VELOCITY;

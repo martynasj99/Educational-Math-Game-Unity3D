@@ -55,7 +55,7 @@ public class SpeechManager : MonoBehaviour
         switch (level)
         {
             case 1:
-                ChangeSpeech("2 + 6 = 8");
+                ChangeSpeech("2 + 6 = 8 -> Count Six times from Two!");
                 break;
             case 2:
                 ChangeSpeech("7 - 3 = 4");

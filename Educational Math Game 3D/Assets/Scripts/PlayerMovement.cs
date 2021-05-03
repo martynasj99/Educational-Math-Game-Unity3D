@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
             joystick.gameObject.SetActive(false);
             x = Input.GetAxis("Horizontal");
             z = Input.GetAxis("Vertical");
+            Debug.Log("move");
         }
         else
         {
